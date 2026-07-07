@@ -2,6 +2,18 @@
 
 A meta-driven Databricks Declarative Pipeline framework. Instead of hardcoding pipeline logic, transformation steps are configured in a Delta table (Unity Catalog) and executed dynamically at runtime.
 
+To keep things simple the framework only supports the following dataset types:
+- table
+- temporary_view
+- materialized_view
+
+Supported expectations:
+- expect
+- expect_or_drop
+- expect_or_fail
+
+> Note: Grouping of expecations is currently not supported.
+
 ## Quickstart
 
 > **Precondition:** Databricks CLI configured with a `DEFAULT` profile.
@@ -21,6 +33,8 @@ Make sure to update the catalog, schema and table names in the test_data script 
 uv run python scripts/create_test_data.py
 uv run python scripts/create_test_config.py
 ```
+
+> Note: This script uses databricks-connect and the DEFAULT profile to create the test data and config.
 
 ### 3. Configure `databricks.yml`
 
