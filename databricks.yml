@@ -1,0 +1,75 @@
+bundle:
+  name: declarative_pipelines
+
+artifacts:
+  default:
+    type: whl
+    build: uv build --wheel
+    path: .
+
+variables:
+  catalog:
+    
+    # TODO: specify catalog to be used
+    default: xxx
+  package_version:
+    default: "0.1.0"
+  config_table:
+    description: "The fully qualified name of the table containing the pipeline configurations."
+    
+    # TODO - update where config table is stored
+    default: "${var.catalog}.schema.declarative_pipeline_config"
+  pipeline_id:
+    description: "The ID of the pipeline to run."
+    
+    # TODO - update to which pipeline shal run
+    default: "pipeline_001"
+
+resources:
+  pipelines:
+    declarative_pipelines_pipeline:
+      name: "${bundle.name}_pipeline"
+      catalog: ${var.catalog}
+      serverless: true
+      libraries:
+        - glob:
+            include: ./pipeline/**
+      environment:
+        dependencies:
+          - "${workspace.artifact_path}/.internal/declarative_pipelines-${var.package_version}-py3-none-any.whl" # required in case of patched wheel usage on serverless clusters
+      configuration:
+        catalog: ${var.catalog}
+        pipelines.numUpdateRetryAttempts: 0 # risk of running endless if not set
+        config_table: ${var.config_table}
+        pipeline_id: ${var.pipeline_id}
+
+  jobs:
+    declarative_pipelines_job:
+      name: "${bundle.name}_job"
+      permissions:
+        - level: CAN_VIEW
+          group_name: users
+      tasks:
+        - task_key: run_pipeline
+          max_retries: 0
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.declarative_pipelines_pipeline.id}
+
+targets:
+  dev:
+    mode: production
+    default: true
+    workspace:
+
+      # TODO: update workspace
+      host: https://adb-xxxxxx.azuredatabricks.net
+      root_path: /Workspace/Code/${bundle.name}
+      artifact_path: "${workspace.root_path}/artifacts/${bundle.git.commit}"
+    variables:
+      
+      # TODO: update catalog to be used
+      catalog: xxxx
+    
+    # TODO: update service principal name or use user
+    run_as:
+      service_principal_name: xxxx

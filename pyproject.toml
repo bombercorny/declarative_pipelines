@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "declarative_pipelines"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dbc = [
+    "ruff>=0.12.8,<0.13",
+    "databricks-connect>=18.2.0,<18.3.0",
+    "pytest>=8.0",
+    "databricks-dlt>=0.3.0",
+    "python-dotenv>=0.9.9",
+]
+
+[tool.ruff]
+exclude = [".git", ".venv", "venv", ".vscode"]
+builtins = ["display", "spark", "dbutils"]
+line-length = 120
+indent-width = 4
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
