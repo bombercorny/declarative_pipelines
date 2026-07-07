@@ -9,8 +9,10 @@ artifacts:
 
 variables:
   catalog:
-    
     # TODO: specify catalog to be used
+    default: xxx
+  schema: 
+    # TODO: specify schema to be used by default
     default: xxx
   package_version:
     default: "0.1.0"
