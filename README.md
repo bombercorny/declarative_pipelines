@@ -26,8 +26,8 @@ uv sync --group dbc
 
 ### 2. Seed test data and config
 
-Create the source tables and write the example pipeline config to the config table. 
-Make sure to update the catalog, schema and table names in the test_data script and test_config.
+Update the catalog, schema and table names in the `test_data script.py` and `test_config.py`.
+Create the source tables and write the example pipeline config to the config table via the scripts:
 
 ```bash
 uv run python scripts/create_test_data.py
